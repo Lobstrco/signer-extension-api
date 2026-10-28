@@ -1,3 +1,22 @@
+# v3.1.0-rc.1
+
+Release candidate of 3.1.0, published under the `next` dist-tag: `npm install
+@lobstrco/signer-extension-api@next`. The notes below describe the whole 3.1.0 release.
+
+# v3.1.0
+
+## New features
+- Added `NETWORK.solana`. `signTransaction` takes standard padded base64 of the full wire
+  transaction (legacy or v0) and resolves the signed transaction in the same grammar
+- `signMessage` on Solana takes standard padded base64 of the bytes to sign and resolves the
+  base58 signature
+- A Solana entry in `getSupportedNetworks` also lists `"signAllTransactions"` and
+  `"signAndSendTransaction"`; this SDK has no function for them, and the extension serves them
+  through its Wallet Standard provider
+- Added `ERROR_MESSAGES.SIGN_RESULT_UNKNOWN`: a Solana sign-and-send whose outcome never came
+  back rejects with it instead of `SIGN_REQUEST_TIMEOUT`, because the wallet may already have
+  broadcast
+
 # v3.0.0
 
 ## New features

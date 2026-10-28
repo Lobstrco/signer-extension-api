@@ -131,7 +131,7 @@ for (const entry of await getSupportedNetworks()) {
 different from the network being absent from the list, which means this build has never heard
 of it. Treat an unknown string as unknown — do not fall back to Stellar.
 
-`NETWORK` is an enum of the networks this SDK version knows (`stellar`, `ripple`), but the
+`NETWORK` is an enum of the networks this SDK version knows (`stellar`, `ripple`, `solana`), but the
 `network` parameter accepts any string, so a page written today can name a network a later
 extension adds.
 
@@ -210,7 +210,7 @@ What this extension build can do. Each entry describes one network:
 | `displayName` | Name to show a user, e.g. `"XRP Ledger"` |
 | `nativeCode` / `nativeDecimals` | The native asset, e.g. `"XRP"` and `6` |
 | `explorerAccountUrl` | Account page prefix; append an address |
-| `signTypes` | Which of `"transaction"` / `"message"` this network accepts |
+| `signTypes` | Which of `"transaction"`, `"message"`, `"signAllTransactions"` and `"signAndSendTransaction"` this network accepts; the list depends on the network and may grow |
 | `broadcaster` | `"dapp"` — signing gives you the signed transaction to submit; `"wallet"` — it gives you the id of one the wallet already sent |
 | `available` | `false` means known but currently unusable |
 
@@ -230,8 +230,14 @@ Shorthand for looking one network up in `getSupportedNetworks()`.
 Signs a transaction as the user and returns the result to your application.
 
 `transaction` is a string **in the network's own grammar** — a base64 XDR envelope on Stellar,
-transaction JSON on the XRP Ledger. What comes back follows that network's `broadcaster`: with
-`"dapp"` (both networks today) you get the signed transaction and submit it yourself.
+transaction JSON on the XRP Ledger, standard padded base64 of the full wire transaction (legacy
+or v0, the wallet as the fee payer and only signer) on Solana. What comes back follows that
+network's `broadcaster`: with `"dapp"` (every network today) you get the signed transaction and
+submit it yourself.
+
+Solana also lists `"signAllTransactions"` and `"signAndSendTransaction"` in `signTypes`; this
+SDK has no function for them, and the extension serves them to Solana dApps through its Wallet
+Standard provider.
 
 The signed transaction comes back in the network's own grammar too:
 
@@ -239,6 +245,7 @@ The signed transaction comes back in the network's own grammar too:
 |---|---|---|
 | Stellar | base64 XDR envelope | the signed envelope, base64 XDR |
 | XRP Ledger | transaction JSON | the signed transaction as a hex-encoded binary blob (`tx_blob`), ready for `submit` |
+| Solana | standard padded base64 of the full wire transaction | the signed transaction, standard padded base64 |
 
 On the XRP Ledger, LOBSTR sets `Fee`, `Sequence` and `LastLedgerSequence` when it signs, so read
 the final values — and the transaction hash — from the returned blob, not from the JSON you sent.
@@ -317,6 +324,19 @@ const userSignMessage = async (message: string): Promise<{signedMessage: string,
 };
 ```
 
+On Solana the message is bytes: pass them as standard padded base64, and `signedMessage` comes
+back as the base58 signature, with `signerAddress` the wallet's base58 address:
+
+```typescript
+import { signMessage, NETWORK } from "@lobstrco/signer-extension-api";
+
+const bytes = new TextEncoder().encode("Hello from my dApp");
+const base64 = btoa(String.fromCharCode(...bytes));
+
+const signed = await signMessage(base64, { network: NETWORK.solana });
+// { signedMessage: "<base58 signature>", signerAddress: "<base58 address>" }
+```
+
 ## Using LOBSTR in the browser
 You now have the LOBSTR signer extension installed on our machine and a library to interact with it. This library will provide you methods to send and receive data from a user’s extension in your website or application.
 
@@ -367,6 +387,7 @@ values — compare `error.message` against them rather than parsing it:
 | `"This request type is not supported"` | The installed extension predates this SDK and does not know the request |
 | `"Sign failed"` | Deliberately vague — the signing did not complete |
 | `"Signing request timed out"` | The user never answered in the app |
+| `"The transaction may have been sent; check the wallet history before retrying"` | Solana `signAndSendTransaction` only (through the Wallet Standard provider): the request reached the wallet, but its outcome never came back. Check the chain before you offer a retry |
 
 ## Upgrading from v2
 

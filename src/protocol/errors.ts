@@ -28,4 +28,7 @@ export const ERROR_MESSAGES = {
     RECONNECT_REQUIRED: "Reconnect the wallet to continue",
     /** A grant is bound to an origin, and these pages have none to bind to. */
     ORIGIN_NOT_SUPPORTED: "A wallet cannot be connected from this page",
+    /** Sign-and-send only: the wallet may already have broadcast, so a blind retry can pay twice. */
+    SIGN_RESULT_UNKNOWN:
+        "The transaction may have been sent; check the wallet history before retrying",
 } as const;

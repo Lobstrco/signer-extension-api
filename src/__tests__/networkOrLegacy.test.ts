@@ -9,7 +9,7 @@ describe("reading a network off the wire", () => {
         expect(networkOrLegacy(undefined)).toBe(NETWORK.stellar);
     });
 
-    it.each([[NETWORK.ripple], [UNKNOWN], [""]])(
+    it.each([[NETWORK.ripple], [NETWORK.solana], [UNKNOWN], [""]])(
         "leaves %j exactly as it arrived",
         (value) => {
             // a present value is the sender's, and rewriting it names the wrong chain

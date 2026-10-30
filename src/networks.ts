@@ -5,6 +5,7 @@
 export enum NETWORK {
     stellar = "stellar",
     ripple = "ripple",
+    solana = "solana",
 }
 
 export const DEFAULT_NETWORK = NETWORK.stellar;

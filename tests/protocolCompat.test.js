@@ -35,8 +35,8 @@ describe("the protocol entry, as a Node consumer meets it", () => {
         );
     });
 
-    test("ships the seventeen dApp-visible error strings and the numbered versions", () => {
-        expect(Object.keys(protocol.ERROR_MESSAGES)).toHaveLength(17);
+    test("ships the nineteen dApp-visible error strings and the numbered versions", () => {
+        expect(Object.keys(protocol.ERROR_MESSAGES)).toHaveLength(19);
         expect([
             protocol.API_VERSION.V1,
             protocol.API_VERSION.V2,

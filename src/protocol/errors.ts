@@ -31,4 +31,6 @@ export const ERROR_MESSAGES = {
     /** Sign-and-send only: the wallet may already have broadcast, so a blind retry can pay twice. */
     SIGN_RESULT_UNKNOWN:
         "The transaction may have been sent; check the wallet history before retrying",
+    /** Solana signs only text, so a transaction can never pass as a message. */
+    INVALID_MESSAGE_PAYLOAD: "The message is not valid for this network",
 } as const;

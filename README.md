@@ -327,7 +327,8 @@ const userSignMessage = async (message: string): Promise<{signedMessage: string,
 On Solana the message is bytes: pass them as standard padded base64, and `signedMessage` comes
 back as the base58 signature, with `signerAddress` the wallet's base58 address. The bytes must be
 UTF-8 text whose first byte is a space or above (no leading newline, tab or other control
-character); anything else, a transaction above all, is refused with `SIGN_FAILED`:
+character), at most 32,768 bytes; anything else, a transaction above all, is refused with
+`INVALID_MESSAGE_PAYLOAD` before the wallet is asked:
 
 ```typescript
 import { signMessage, NETWORK } from "@lobstrco/signer-extension-api";
@@ -384,6 +385,7 @@ values — compare `error.message` against them rather than parsing it:
 | `"This type of signing is not supported on this network"` | e.g. `signMessage` on the XRP Ledger |
 | `"The transaction payload is not valid for this network"` | The payload is not in that network's grammar |
 | `"The transaction payload is too large"` | Over the size the network's signing path accepts |
+| `"The message is not valid for this network"` | Solana `signMessage` only: the message is not standard padded base64 of at most 32,768 bytes of UTF-8 text that starts with a space or above |
 | `"Couldn't open access prompt"` | The extension could not open its confirmation window |
 | `"Unable to send message to extension"` | The page could not reach the extension — typically after the extension was updated; reload the page |
 | `"This request type is not supported"` | The installed extension predates this SDK and does not know the request |

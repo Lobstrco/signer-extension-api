@@ -9,7 +9,8 @@ Release candidate of 3.1.0, published under the `next` dist-tag: `npm install
 - Added `NETWORK.solana`. `signTransaction` takes standard padded base64 of the full wire
   transaction (legacy or v0) and resolves the signed transaction in the same grammar
 - `signMessage` on Solana takes standard padded base64 of the bytes to sign and resolves the
-  base58 signature
+  base58 signature. The bytes must be UTF-8 text whose first byte is a space or above; anything
+  else, a transaction above all, rejects with `ERROR_MESSAGES.SIGN_FAILED`
 - A Solana entry in `getSupportedNetworks` also lists `"signAllTransactions"` and
   `"signAndSendTransaction"`; this SDK has no function for them, and the extension serves them
   through its Wallet Standard provider

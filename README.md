@@ -325,7 +325,9 @@ const userSignMessage = async (message: string): Promise<{signedMessage: string,
 ```
 
 On Solana the message is bytes: pass them as standard padded base64, and `signedMessage` comes
-back as the base58 signature, with `signerAddress` the wallet's base58 address:
+back as the base58 signature, with `signerAddress` the wallet's base58 address. The bytes must be
+UTF-8 text whose first byte is a space or above (no leading newline, tab or other control
+character); anything else, a transaction above all, is refused with `SIGN_FAILED`:
 
 ```typescript
 import { signMessage, NETWORK } from "@lobstrco/signer-extension-api";

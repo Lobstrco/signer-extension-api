@@ -18,6 +18,11 @@ Release candidate of 3.1.0, published under the `next` dist-tag: `npm install
 - Added `ERROR_MESSAGES.SIGN_RESULT_UNKNOWN`: a Solana sign-and-send whose outcome never came
   back rejects with it instead of `SIGN_REQUEST_TIMEOUT`, because the wallet may already have
   broadcast
+- A Solana transaction may carry other signers besides the wallet, which signs only the fee
+  payer's slot. Their slots come back byte for byte; an empty one comes back empty
+- Added `ERROR_MESSAGES.MISSING_CO_SIGNATURE` (sign-and-send with another signer's slot still
+  empty) and `ERROR_MESSAGES.INVALID_CO_SIGNATURE` (a signature in another signer's slot that
+  does not match the transaction)
 
 # v3.0.0
 

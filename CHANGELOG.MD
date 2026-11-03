@@ -1,3 +1,32 @@
+# v3.1.0-rc.1
+
+Release candidate of 3.1.0, published under the `next` dist-tag: `npm install
+@lobstrco/signer-extension-api@next`. The notes below describe the whole 3.1.0 release.
+
+# v3.1.0
+
+## New features
+- Added `NETWORK.solana`. `signTransaction` takes standard padded base64 of the full wire
+  transaction (legacy or v0) and resolves the signed transaction in the same grammar
+- `signMessage` on Solana takes standard padded base64 of the bytes to sign and resolves the
+  base58 signature. The bytes must be at most 32,768 bytes of UTF-8 text whose first byte is a
+  space or above; anything else, a transaction above all, rejects with the new
+  `ERROR_MESSAGES.INVALID_MESSAGE_PAYLOAD`
+- A Solana entry in `getSupportedNetworks` also lists `"signAllTransactions"` and
+  `"signAndSendTransaction"`; this SDK has no function for them, and the extension serves them
+  through its Wallet Standard provider
+- Added `ERROR_MESSAGES.SIGN_RESULT_UNKNOWN`: a Solana sign-and-send whose outcome never came
+  back rejects with it instead of `SIGN_REQUEST_TIMEOUT`, because the wallet may already have
+  broadcast
+- A Solana transaction may carry other signers besides the wallet, which signs only its own
+  slot. Another account may pay the fee unless the wallet also sends the transaction:
+  `signAndSendTransaction` needs the wallet as the fee payer. Every other slot, the fee
+  payer's included, comes back byte for byte; an empty one comes back empty
+- Added `ERROR_MESSAGES.MISSING_CO_SIGNATURE` (sign-and-send with a slot after the first still
+  empty: another signer's, or the wallet's own when it is not the fee payer) and
+  `ERROR_MESSAGES.INVALID_CO_SIGNATURE` (a signature in another signer's slot that does not
+  match the transaction)
+
 # v3.0.0
 
 ## New features

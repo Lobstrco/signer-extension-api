@@ -231,19 +231,21 @@ Signs a transaction as the user and returns the result to your application.
 
 `transaction` is a string **in the network's own grammar** — a base64 XDR envelope on Stellar,
 transaction JSON on the XRP Ledger, standard padded base64 of the full wire transaction (legacy
-or v0, the wallet as the fee payer) on Solana. What comes back follows that
-network's `broadcaster`: with `"dapp"` (every network today) you get the signed transaction and
-submit it yourself.
+or v0) on Solana. What comes back follows that network's `broadcaster`: with `"dapp"` (every
+network today) you get the signed transaction and submit it yourself.
 
-On Solana the wallet fills only the first signature slot, the fee payer's. A transaction may
-carry other signers: their slots come back byte for byte, and a slot that is still empty comes
-back empty for you to fill before you submit. A signature already in another slot must be valid,
-or the call is refused with `INVALID_CO_SIGNATURE`.
+On Solana the wallet must be one of the transaction's signers, and it fills only its own
+signature slot; the fee payer may be another account. Every other slot, the fee payer's
+included, comes back byte for byte, and a slot that is still empty comes back empty for you to
+fill before you submit. A signature already in another slot must be valid, or the call is
+refused with `INVALID_CO_SIGNATURE`.
 
 Solana also lists `"signAllTransactions"` and `"signAndSendTransaction"` in `signTypes`; this
 SDK has no function for them, and the extension serves them to Solana dApps through its Wallet
-Standard provider. `signAndSendTransaction` needs every other signer's slot signed already; an
-empty one is refused with `MISSING_CO_SIGNATURE` before the user is asked.
+Standard provider. `signAllTransactions` follows the rules above for each transaction.
+`signAndSendTransaction` needs the wallet as the fee payer, in the first slot, and every other
+signer's slot signed already; a later slot that is still empty, the wallet's own included, is
+refused with `MISSING_CO_SIGNATURE` before the user is asked.
 
 The signed transaction comes back in the network's own grammar too:
 
@@ -392,7 +394,7 @@ values — compare `error.message` against them rather than parsing it:
 | `"The transaction payload is not valid for this network"` | The payload is not in that network's grammar |
 | `"The transaction payload is too large"` | Over the size the network's signing path accepts |
 | `"The message is not valid for this network"` | Solana `signMessage` only: the message is not standard padded base64 of at most 32,768 bytes of UTF-8 text that starts with a space or above |
-| `"Every other signer must sign the transaction before it is sent"` | Solana `signAndSendTransaction` only: another signer's slot is still empty |
+| `"Every other signer must sign the transaction before it is sent"` | Solana `signAndSendTransaction` only: a slot after the first is still empty — another signer's, or the wallet's own when the wallet is not the fee payer |
 | `"Another signer's signature on the transaction is not valid"` | Solana only: a signature already in another signer's slot does not match the transaction |
 | `"Couldn't open access prompt"` | The extension could not open its confirmation window |
 | `"Unable to send message to extension"` | The page could not reach the extension — typically after the extension was updated; reload the page |

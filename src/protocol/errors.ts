@@ -33,7 +33,7 @@ export const ERROR_MESSAGES = {
         "The transaction may have been sent; check the wallet history before retrying",
     /** Solana signs only text, so a transaction can never pass as a message. */
     INVALID_MESSAGE_PAYLOAD: "The message is not valid for this network",
-    /** Sign-and-send only: the wallet cannot fill another signer's slot, and the network would refuse it empty. */
+    /** Sign-and-send only: the wallet must pay the fee and fills only the first slot, so no later slot may be empty. */
     MISSING_CO_SIGNATURE:
         "Every other signer must sign the transaction before it is sent",
     INVALID_CO_SIGNATURE:

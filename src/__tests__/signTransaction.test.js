@@ -55,6 +55,17 @@ describe("signTransaction", () => {
                 NETWORK.ripple,
             );
         });
+
+        it("posts a Solana transaction as an ordinary transaction", async () => {
+            await signTransaction(INITIAL_XDR, { network: NETWORK.solana });
+
+            expect(requests.sign).toHaveBeenLastCalledWith(
+                INITIAL_XDR,
+                "",
+                "transaction",
+                "solana",
+            );
+        });
     });
 
     describe("fail case", () => {

@@ -28,4 +28,14 @@ export const ERROR_MESSAGES = {
     RECONNECT_REQUIRED: "Reconnect the wallet to continue",
     /** A grant is bound to an origin, and these pages have none to bind to. */
     ORIGIN_NOT_SUPPORTED: "A wallet cannot be connected from this page",
+    /** Sign-and-send only: the wallet may already have broadcast, so a blind retry can pay twice. */
+    SIGN_RESULT_UNKNOWN:
+        "The transaction may have been sent; check the wallet history before retrying",
+    /** Solana signs only text, so a transaction can never pass as a message. */
+    INVALID_MESSAGE_PAYLOAD: "The message is not valid for this network",
+    /** Sign-and-send only: the wallet must pay the fee and fills only the first slot, so no later slot may be empty. */
+    MISSING_CO_SIGNATURE:
+        "Every other signer must sign the transaction before it is sent",
+    INVALID_CO_SIGNATURE:
+        "Another signer's signature on the transaction is not valid",
 } as const;

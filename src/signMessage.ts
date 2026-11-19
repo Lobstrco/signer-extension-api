@@ -3,7 +3,7 @@ import { isBrowser } from "./internal/environment";
 import { NetworkOptions } from "./internal/types";
 import { readWalletRef } from "./internal/walletRef";
 
-/** Offered only where `getSupportedNetworks` lists `"message"` in `signTypes`. */
+/** Offered only where `getSupportedNetworks` lists `"message"` in `signTypes`; on Solana it signs base64 bytes into a base58 signature. */
 export const signMessage = async (
     message: string,
     options: NetworkOptions = {},

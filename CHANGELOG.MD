@@ -1,7 +1,8 @@
 # v3.1.0-rc.1
 
 Release candidate of 3.1.0, published under the `next` dist-tag: `npm install
-@lobstrco/signer-extension-api@next`. The notes below describe the whole 3.1.0 release.
+@lobstrco/signer-extension-api@next`. The notes for the whole 3.1.0 release are in the
+[v3.1.0 section of CHANGELOG.MD](https://github.com/Lobstrco/signer-extension-api/blob/master/CHANGELOG.MD#v310).
 
 # v3.1.0
 

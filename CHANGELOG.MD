@@ -1,3 +1,20 @@
+# v3.2.0-rc.1
+
+Release candidate of 3.2.0, published under the `next` dist-tag: `npm install
+@lobstrco/signer-extension-api@next`. The notes for the whole 3.2.0 release are in the
+[v3.2.0 section of CHANGELOG.MD](https://github.com/Lobstrco/signer-extension-api/blob/master/CHANGELOG.MD#v320).
+
+# v3.2.0
+
+## New features
+- Added `NETWORK.ethereum` and `NETWORK.base`, two peer networks with one value per chain.
+  This SDK does not connect or sign on them: dApps find LOBSTR on Ethereum and Base through
+  EIP-6963 discovery (name `"LOBSTR"`, `rdns` `co.lobstr.wallet`) and use the extension's
+  EIP-1193 provider
+- `getPublicKey`, `getConnectedWallet`, `signTransaction` and `signMessage` naming Ethereum or
+  Base reject with the existing `"Network is not supported"`, and `getSupportedNetworks` does
+  not list them. No function, message type or error string is added
+
 # v3.1.0-rc.1
 
 Release candidate of 3.1.0, published under the `next` dist-tag: `npm install

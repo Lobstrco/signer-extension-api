@@ -6,6 +6,10 @@ export enum NETWORK {
     stellar = "stellar",
     ripple = "ripple",
     solana = "solana",
+    /** Served by the extension's EIP-1193 provider only; SDK calls naming it are refused. */
+    ethereum = "ethereum",
+    /** Served by the extension's EIP-1193 provider only; SDK calls naming it are refused. */
+    base = "base",
 }
 
 export const DEFAULT_NETWORK = NETWORK.stellar;

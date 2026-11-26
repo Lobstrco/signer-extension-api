@@ -9,6 +9,10 @@ import { readWalletRef } from "./internal/walletRef";
  * full wire transaction (legacy or v0) on Solana. What resolves follows that
  * network's `broadcaster` from `getSupportedNetworks`: the signed transaction
  * for you to submit, or the id of one the wallet already sent.
+ *
+ * Ethereum and Base are not signed through this SDK: the extension serves them
+ * through its EIP-1193 provider (EIP-6963 discovery) and refuses this call for
+ * them with `NETWORK_NOT_SUPPORTED`.
  */
 export const signTransaction = async (
     transaction: string,

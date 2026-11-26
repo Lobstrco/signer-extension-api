@@ -3,7 +3,11 @@ import { isBrowser } from "./internal/environment";
 import { NetworkOptions } from "./internal/types";
 import { readWalletRef } from "./internal/walletRef";
 
-/** Offered only where `getSupportedNetworks` lists `"message"` in `signTypes`; on Solana it signs base64 bytes into a base58 signature. */
+/**
+ * Offered only where `getSupportedNetworks` lists `"message"` in `signTypes`; on Solana it signs
+ * base64 bytes into a base58 signature. Ethereum and Base are served by the extension's EIP-1193
+ * provider instead, and this call naming them is refused with `NETWORK_NOT_SUPPORTED`.
+ */
 export const signMessage = async (
     message: string,
     options: NetworkOptions = {},

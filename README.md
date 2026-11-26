@@ -131,9 +131,18 @@ for (const entry of await getSupportedNetworks()) {
 different from the network being absent from the list, which means this build has never heard
 of it. Treat an unknown string as unknown — do not fall back to Stellar.
 
-`NETWORK` is an enum of the networks this SDK version knows (`stellar`, `ripple`, `solana`), but the
-`network` parameter accepts any string, so a page written today can name a network a later
-extension adds.
+`NETWORK` is an enum of the networks this SDK version knows (`stellar`, `ripple`, `solana`,
+`ethereum`, `base`), but the `network` parameter accepts any string, so a page written today can
+name a network a later extension adds.
+
+### Ethereum and Base
+
+`NETWORK.ethereum` and `NETWORK.base` name LOBSTR's two EVM networks, but this SDK does not
+connect or sign on them. A dApp finds LOBSTR there through EIP-6963 discovery (the wallet
+announces itself as `"LOBSTR"` with `rdns` `co.lobstr.wallet`) and uses its EIP-1193 provider,
+as it would any injected wallet. `getPublicKey`, `getConnectedWallet`, `signTransaction` and
+`signMessage` naming either network reject with `"Network is not supported"`, and
+`getSupportedNetworks` does not list them.
 
 ## API
 
@@ -383,7 +392,7 @@ values — compare `error.message` against them rather than parsing it:
 | `error.message` | What happened |
 |---|---|
 | `"User declined access"` | The user closed the prompt or rejected it in the app |
-| `"Network is not supported"` | This extension build does not know the network you named |
+| `"Network is not supported"` | This extension build does not know the network you named, or serves it only through another provider (Ethereum and Base) |
 | `"The connected wallet belongs to a different network"` | The wallet answered on a network other than the one you asked for |
 | `"The connection key is missing"` | `signTransaction` or `signMessage` was called before `getPublicKey` connected a wallet on that network |
 | `"The data to sign is missing"` | The payload was empty or not a string |
